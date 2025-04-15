@@ -4,4 +4,5 @@ abstract class LessonRepository {
   Future<List<Lesson>> getAll();
   Future<void> save(Lesson lesson);
   Future<void> delete(String id);
+  Future<Lesson?> getById(String id);
 }

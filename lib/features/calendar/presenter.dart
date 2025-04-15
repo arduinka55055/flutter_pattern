@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/data/conterters/schedule_converter.dart';
 import 'package:flutter_application_1/features/lesson/entity.dart';
 
 import '../lesson/interactor.dart';
@@ -29,13 +30,15 @@ class CalendarPresenter extends ChangeNotifier {
   Future<void> createCalendar({
     required String name,
     required int weekCount,
+    required String timetableId,
     required Map<int, Map<Day, List<String?>>> schedule,
   }) async {
     final newCalendar = Calendar(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       name: name,
       weekCount: weekCount,
-      schedule: schedule,
+      timetableId: timetableId,
+      schedule: ScheduleConverter.toHiveFormat(schedule),
     );
 
     await _interactor.saveCalendar(newCalendar);
@@ -50,5 +53,21 @@ class CalendarPresenter extends ChangeNotifier {
       _errorMessage = 'Failed to delete calendar: ${e.toString()}';
       notifyListeners();
     }
+  }
+
+  void updateCalendar(
+      {required String id,
+      required String name,
+      required int weekCount,
+      required String timetableId,
+      required Map<int, Map<Day, List<String?>>> schedule}) async {
+    final updatedCalendar = Calendar(
+        id: id,
+        name: name,
+        weekCount: weekCount,
+        timetableId: timetableId,
+        schedule: ScheduleConverter.toHiveFormat(schedule));
+    await _interactor.deleteCalendar(id);
+    await _interactor.saveCalendar(updatedCalendar);
   }
 }

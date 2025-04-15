@@ -1,20 +1,27 @@
 import 'package:flutter_application_1/features/lesson/entity.dart';
+import 'package:hive/hive.dart';
 import '../abstract/lesson.dart';
 
-class MockLessonRepository implements LessonRepository {
-  final List<Lesson> _lessons = [];
+class LessonRepositoryImpl implements LessonRepository {
+  final Box<Lesson> _box = Hive.box<Lesson>('lessons');
 
   @override
-  Future<List<Lesson>> getAll() async => List.from(_lessons);
+  Future<List<Lesson>> getAll() async {
+    return _box.values.toList();
+  }
 
   @override
   Future<void> save(Lesson lesson) async {
-    _lessons.removeWhere((l) => l.id == lesson.id);
-    _lessons.add(lesson);
+    await _box.put(lesson.id, lesson);
   }
 
   @override
   Future<void> delete(String id) async {
-    _lessons.removeWhere((l) => l.id == id);
+    await _box.delete(id);
+  }
+
+  @override
+  Future<Lesson?> getById(String id) async {
+    return _box.get(id);
   }
 }

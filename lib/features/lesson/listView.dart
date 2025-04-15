@@ -37,7 +37,7 @@ class LessonListScreen extends StatelessWidget {
                   itemBuilder: (context, index) => LessonListItem(
                     lesson: presenter.lessons[index],
                     onEdit: () =>
-                        _editLesson(context, presenter.lessons[index]),
+                        _editLesson(context, presenter.lessons[index].id),
                     onDelete: () =>
                         _confirmDelete(context, presenter.lessons[index]),
                     isSelected: false, // Optional parameter
@@ -46,13 +46,8 @@ class LessonListScreen extends StatelessWidget {
     );
   }
 
-  void _editLesson(BuildContext context, Lesson lesson) {
-    // Implement edit navigation TODO:
-    /*Navigator.pushNamed(
-      context,
-      AppRouter.editLesson,
-      arguments: lesson.id,
-    );*/
+  void _editLesson(BuildContext context, String lessonId) {
+    Navigator.pushNamed(context, AppRouter.editLesson, arguments: lessonId);
   }
 
   void _confirmDelete(BuildContext context, Lesson lesson) {

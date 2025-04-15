@@ -175,14 +175,14 @@ class WeekScheduleCard extends StatelessWidget {
               )),
         ],
         onChanged: (value) => onLessonSelected(day, slotIndex, value),
-        selectedItemBuilder: (context) => [
+        /*selectedItemBuilder: (context) => [
           ...availableLessons.map((lesson) => Center(
                 child: Text(
                   lesson.name,
                   overflow: TextOverflow.ellipsis,
                 ),
               )),
-        ],
+        ],*/
       ),
     );
   }

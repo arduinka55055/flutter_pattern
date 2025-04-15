@@ -4,4 +4,5 @@ abstract class CalendarRepository {
   Future<List<Calendar>> getAll();
   Future<void> save(Calendar calendar);
   Future<void> delete(String id);
+  Future<Calendar?> getById(String id);
 }

@@ -1,4 +1,3 @@
-// lib/features/timetable/viper/view/timetable_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +26,44 @@ class TimetableListScreen extends StatelessWidget {
                 return ListTile(
                   title: Text(timetable.name),
                   subtitle: Text('${timetable.timeSlots.length} time slots'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () => Navigator.pushNamed(
+                            context, '/timetables/edit',
+                            arguments: presenter.timetables[index].id),
+                        icon: const Icon(Icons.edit),
+                      ),
+                      const SizedBox(width: 16),
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Delete Timetable'),
+                              content: const Text(
+                                  'Are you sure you want to delete this timetable?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    presenter.deleteTimetable(timetable.id);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ],
+                  ),
                 );
               },
             ),

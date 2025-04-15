@@ -5,7 +5,9 @@ import 'entity.dart';
 import 'presenter.dart';
 
 class CreateLessonScreen extends StatefulWidget {
-  const CreateLessonScreen({super.key});
+  final bool editMode;
+
+  const CreateLessonScreen({super.key, this.editMode = false});
 
   @override
   State<CreateLessonScreen> createState() => _CreateLessonScreenState();
@@ -27,22 +29,59 @@ class _CreateLessonScreenState extends State<CreateLessonScreen> {
     Colors.red,
   ];
 
+  String get actionName =>
+      widget.editMode ? 'Change Timetable' : 'Create Timetable';
+
+  String? _updateId;
+
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      context.read<LessonPresenter>().createLesson(
-            name: _nameController.text,
-            teacher: _teacherController.text,
-            room: _roomController.text,
-            notes: _notesController.text,
-            type: _selectedType,
-            color: _selectedColor,
-          );
+      if (!widget.editMode) {
+        context.read<LessonPresenter>().createLesson(
+              name: _nameController.text,
+              teacher: _teacherController.text,
+              room: _roomController.text,
+              notes: _notesController.text,
+              type: _selectedType,
+              color: _selectedColor,
+            );
+      }
+      else {
+        context.read<LessonPresenter>().updateLesson(
+              id: _updateId!,
+              name: _nameController.text,
+              teacher: _teacherController.text,
+              room: _roomController.text,
+              notes: _notesController.text,
+              type: _selectedType,
+              color: _selectedColor,
+            );
+      }
       Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.editMode && _updateId == null) {
+      final routeSetting = ModalRoute.of(context)?.settings.arguments;
+      if (routeSetting != null) {
+        final lessonId = routeSetting as String;
+        final lesson = context
+            .read<LessonPresenter>()
+            .lessons
+            .firstWhere((l) => l.id == lessonId);
+
+        _updateId = lesson.id;
+        _nameController.text = lesson.name;
+        _teacherController.text = lesson.teacher;
+        _roomController.text = lesson.room;
+        _notesController.text = lesson.notes;
+        _selectedType = lesson.type;
+        _selectedColor = lesson.color;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Create Lesson')),
       body: Padding(

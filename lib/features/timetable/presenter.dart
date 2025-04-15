@@ -11,7 +11,9 @@ class TimetablePresenter extends ChangeNotifier {
   List<Timetable> get timetables => _timetables;
   bool get isLoading => _isLoading;
 
-  TimetablePresenter(this._interactor);
+  TimetablePresenter(this._interactor) {
+    loadTimetables();
+  }
 
   Future<void> loadTimetables() async {
     _isLoading = true;
@@ -26,6 +28,23 @@ class TimetablePresenter extends ChangeNotifier {
   Future<void> createTimetable(String name, List<TimeRange> slots) async {
     final newTimetable = Timetable(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: name,
+      timeSlots: slots,
+    );
+
+    await _interactor.saveTimetable(newTimetable);
+    await loadTimetables();
+  }
+
+  void deleteTimetable(String id) async {
+    await _interactor.deleteTimetable(id);
+    await loadTimetables();
+  }
+
+  void updateTimetable(String id, String name, List<TimeRange> slots) async {
+    deleteTimetable(id);
+    final newTimetable = Timetable(
+      id: id,
       name: name,
       timeSlots: slots,
     );

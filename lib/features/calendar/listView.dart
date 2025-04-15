@@ -62,20 +62,36 @@ class _CalendarListScreenState extends State<CalendarListScreen> {
                   itemCount: presenter.calendars.length,
                   itemBuilder: (context, index) => _CalendarListItem(
                     calendar: presenter.calendars[index],
+                    onExport: () =>
+                        _exportCalendar(context, presenter.calendars[index]),
+                    onEdit: () =>
+                        _editCalendar(context, presenter.calendars[index].id),
                     onDelete: () => _confirmDelete(presenter.calendars[index]),
                   ),
                 ),
     );
   }
+
+  _editCalendar(BuildContext context, String id) {
+    Navigator.pushNamed(context, AppRouter.editCalendar, arguments: id);
+  }
+
+  _exportCalendar(BuildContext context, Calendar cal) {
+    Navigator.pushNamed(context, AppRouter.exportCalendar, arguments: cal);
+  }
 }
 
 class _CalendarListItem extends StatelessWidget {
   final Calendar calendar;
+  final VoidCallback onExport;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const _CalendarListItem({
     required this.calendar,
+    required this.onExport,
     required this.onDelete,
+    required this.onEdit,
   });
 
   @override
@@ -87,18 +103,36 @@ class _CalendarListItem extends StatelessWidget {
             style: const TextStyle(fontWeight: FontWeight.w500)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('${calendar.weekCount} week(s)'),
-            Text('Timetable: ${calendar.timetableId}'),
-          ],
+          children: [Text('${calendar.weekCount} week(s)')],
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete, color: Colors.red),
-          onPressed: onDelete,
-        ),
-        onTap: () {
-          // TODO: Navigate to calendar detail screen
-        },
+        trailing: _buildActionButtons(),
+        onTap: onEdit,
+      ),
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return SizedBox(
+      width: 120,
+      child: Row(
+        children: [
+          IconButton(
+            icon:
+                Icon(Icons.import_export_outlined, color: Colors.blue.shade600),
+            onPressed: onExport,
+            tooltip: 'Export calendar',
+          ),
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.blue.shade600),
+            onPressed: onEdit,
+            tooltip: 'Edit calendar',
+          ),
+          IconButton(
+            icon: Icon(Icons.delete, color: Colors.red.shade600),
+            onPressed: onDelete,
+            tooltip: 'Delete calendar',
+          ),
+        ],
       ),
     );
   }
