@@ -1,5 +1,6 @@
 // lib/core/router/app_router.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Common/SplashScreen.dart';
 import 'package:flutter_application_1/features/calendar/listView.dart';
 import 'package:flutter_application_1/features/export/view.dart';
 import 'package:flutter_application_1/features/timetable/createView.dart';
@@ -26,7 +27,7 @@ class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return MaterialPageRoute(builder: (_) => const MainWrapper());
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case timetableList:
         return MaterialPageRoute(
             builder: (_) => const MainWrapper(child: TimetableListScreen()));

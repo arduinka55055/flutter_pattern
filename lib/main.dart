@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: AppRouter.timetableList,
+        initialRoute: AppRouter.home,
         onGenerateRoute: AppRouter.onGenerateRoute,
         debugShowCheckedModeBanner: false,
       ),
