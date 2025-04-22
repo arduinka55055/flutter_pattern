@@ -8,7 +8,7 @@ import 'package:flutter_application_1/features/lesson/entity.dart';
 import 'package:flutter_application_1/features/lesson/presenter.dart';
 import 'package:flutter_application_1/features/timetable/entity.dart';
 import 'package:flutter_application_1/features/timetable/presenter.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+//import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:intl/intl.dart';
 import 'package:ical/serializer.dart';
 import 'package:provider/provider.dart';
@@ -53,8 +53,8 @@ class _ExportScreenState extends State<ExportScreen> {
   }
 
   Future<void> _initTimeZone() async {
-    final String currentTimeZone =
-        await FlutterNativeTimezone.getLocalTimezone();
+    final String currentTimeZone = "EET";
+    //await FlutterNativeTimezone.getLocalTimezone();
     setState(() => _timeZone = currentTimeZone);
   }
 
